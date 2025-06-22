@@ -18,7 +18,7 @@ public class AccountController {
     @PostMapping
     public ResponseEntity<String> signUp(@RequestBody AccountInputDto dto) {
         accountService.createAccount(dto);
-        return ResponseEntity.ok("Account successfully created!");
+        return ResponseEntity.ok("Account aangemaakt!");
     }
 
 }

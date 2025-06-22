@@ -3,6 +3,7 @@ package petnet.com.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import petnet.com.dtos.AccountInputDto;
+import petnet.com.exceptions.EmailAlreadyExistsException;
 import petnet.com.models.Account;
 import petnet.com.models.User;
 import petnet.com.repositories.AccountRepository;
@@ -18,6 +19,11 @@ public class AccountService {
     private AccountRepository accountRepository;
 
     public void createAccount(AccountInputDto dto) {
+
+        if (accountRepository.existsByEmail(dto.email)) {
+            throw new EmailAlreadyExistsException("Dit e-mailadres is al in gebruik.");
+        }
+
         User user = new User();
         user.setFirstName(dto.firstName);
         user.setPreposition(dto.preposition);
