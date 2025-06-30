@@ -2,6 +2,7 @@ package petnet.com.models;
 import jakarta.persistence.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -16,6 +17,8 @@ public class User {
     private String lastName;
     @OneToOne(mappedBy="user", cascade = CascadeType.ALL)
     private Account account;
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Post> posts;
 
     public Long getUserId() {
         return userId;
@@ -51,5 +54,13 @@ public class User {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }
