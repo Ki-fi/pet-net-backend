@@ -3,12 +3,14 @@ package petnet.com.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import petnet.com.dtos.PostInputDto;
+import petnet.com.dtos.PostOutputDto;
 import petnet.com.models.Post;
 import petnet.com.models.PostStatus;
 import petnet.com.models.User;
 import petnet.com.repositories.PostRepository;
 import petnet.com.repositories.UserRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PostService {
@@ -42,6 +44,34 @@ public class PostService {
 
         post.setCreator(user);
         postRepository.save(post);
+    }
+
+    public List<PostOutputDto> getAllPosts() {
+        List<Post> posts = postRepository.findAll();
+
+        return posts
+                .stream()
+                .map(this::convertToOutputDto)
+                .toList();
+    }
+
+    private PostOutputDto convertToOutputDto(Post post) {
+        PostOutputDto dto = new PostOutputDto();
+
+        User creator = post.getCreator();
+
+        dto.firstName = creator.getFirstName();
+        dto.preposition = creator.getPreposition();
+        dto.lastName = creator.getLastName();
+
+        dto.postId = post.getPostId();
+        dto.startDate = post.getStartDate();
+        dto.endDate = post.getEndDate();
+        dto.title = post.getTitle();
+        dto.remark = post.getRemark();
+        dto.postStatus = post.getPostStatus();
+
+        return dto;
     }
 
 }
