@@ -39,4 +39,14 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Deze post bestaat niet.");
     }
 
+    @ExceptionHandler(StackOverflowError.class)
+    public ResponseEntity<String> handleStackOverflow(StackOverflowError e) {
+        // Log the top 20 stack frames to see where the loop starts
+        StackTraceElement[] trace = e.getStackTrace();
+        for (int i = 0; i < Math.min(20, trace.length); i++) {
+            System.err.println("SOF: " + trace[i]);
+        }
+        return ResponseEntity.internalServerError().body("Stack overflow occurred");
+    }
+
 }
