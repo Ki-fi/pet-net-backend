@@ -21,7 +21,7 @@ public class PostController {
     private PostService postService;
 
     @PostMapping
-    public ResponseEntity<String> createPost(@RequestBody PostInputDto dto) {
+    public ResponseEntity<String> createPost(@RequestBody PostInputDto dto, @AuthenticationPrincipal UserDetails userDetails) {
         postService.createPost(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Post aangemaakt!");
     }
