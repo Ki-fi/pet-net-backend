@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import petnet.com.dtos.AuthDto;
+import petnet.com.security.CustomUserDetails;
 import petnet.com.security.JwtService;
 
 import java.util.HashMap;
@@ -37,13 +38,14 @@ public class AuthController {
 
         try {
             Authentication auth = authManager.authenticate(authToken);
-            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
             String jwt = jwtService.generateToken(userDetails);
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", jwt);
             response.put("user", Map.of(
-                    "email", userDetails.getUsername()
+                    "email", userDetails.getUsername(),
+                    "id", userDetails.getUserId()
             ));
 
             return ResponseEntity.ok()

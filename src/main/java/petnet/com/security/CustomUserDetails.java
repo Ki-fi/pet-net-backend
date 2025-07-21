@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import petnet.com.models.Account;
+import petnet.com.models.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,9 +13,11 @@ import java.util.List;
 public class CustomUserDetails implements UserDetails {
 
     private final Account account;
+    private final User user;
 
     public CustomUserDetails(Account account) {
         this.account = account;
+        this.user = account.getUser();
     }
 
     @Override
@@ -30,6 +33,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return account.getEmail();
+    }
+
+    public Long getUserId() {
+        return user.getUserId();
     }
 
     @Override
