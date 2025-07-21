@@ -3,7 +3,9 @@ package petnet.com.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import petnet.com.dtos.PostInputDto;
 import petnet.com.dtos.PostOutputDto;
 import petnet.com.services.PostService;
@@ -19,7 +21,7 @@ public class PostController {
     private PostService postService;
 
     @PostMapping
-    public ResponseEntity<String> createPost(@RequestBody PostInputDto dto) {
+    public ResponseEntity<String> createPost(@RequestBody PostInputDto dto, @AuthenticationPrincipal UserDetails userDetails) {
         postService.createPost(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Post aangemaakt!");
     }

@@ -1,6 +1,7 @@
 package petnet.com.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import petnet.com.dtos.AccountInputDto;
 import petnet.com.exceptions.EmailAlreadyExistsException;
@@ -12,11 +13,18 @@ import petnet.com.repositories.UserRepository;
 @Service
 public class AccountService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private AccountRepository accountRepository;
+    public AccountService(UserRepository userRepository,
+                          AccountRepository accountRepository,
+                          PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public void createAccount(AccountInputDto dto) {
 
@@ -31,12 +39,12 @@ public class AccountService {
 
         Account account = new Account();
         account.setEmail(dto.email);
-        account.setPassword(dto.password);
+        account.setPassword(passwordEncoder.encode(dto.password));
         account.setUser(user);
 
         user.setAccount(account);
 
         userRepository.save(user);
     }
-
 }
+
