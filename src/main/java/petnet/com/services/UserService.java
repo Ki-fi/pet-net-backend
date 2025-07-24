@@ -3,6 +3,8 @@ package petnet.com.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import petnet.com.exceptions.AvatarNotFoundException;
@@ -12,6 +14,7 @@ import petnet.com.utils.ValidateUpload;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,28 +55,41 @@ public class UserService {
         }
     }
 
-    public Resource getAvatar(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(AvatarNotFoundException::new);
+    public ResponseEntity<Resource> getAvatar(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
 
-        String avatar = user.getAvatar();
-        if (avatar == null || avatar.isBlank()) {
-            throw new AvatarNotFoundException();
+        if (user == null || user.getAvatar() == null || user.getAvatar().isBlank()) {
+            return ResponseEntity.noContent().build();
         }
 
-        Path path = Paths.get("uploads/avatars/").resolve(avatar);
+        Path path = Paths.get("uploads/avatars/").resolve(user.getAvatar());
+
         try {
             Resource file = new UrlResource(path.toUri());
-
             if (!file.exists() || !file.isReadable()) {
-                throw new AvatarNotFoundException();
+                return ResponseEntity.noContent().build();
             }
-            return file;
+
+            String contentType = URLConnection.guessContentTypeFromName(file.getFilename());
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            try {
+                contentType = Files.probeContentType(file.getFile().toPath());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(file);
 
         } catch (MalformedURLException e) {
-            throw new AvatarNotFoundException();
+            return ResponseEntity.noContent().build();
         }
     }
+
 
 
 }
