@@ -4,9 +4,9 @@ VALUES ('Tom', '', 'Kats'),
        ('Leo', 'den', 'Purr');
 
 INSERT INTO accounts(email, password, user_id)
-VALUES ('tom@email.com', '$2a$10$N9qo8uLOickgx2ZMRZo5i.e5k/E2PqxIDFkzJ.W/HRcU6yB1iMWty', 1),
-       ('merel@email.com', '$2a$10$N9qo8uLOickgx2ZMRZo5i.e5k/E2PqxIDFkzJ.W/HRcU6yB1iMWty', 2),
-       ('leo@email.com', '$2a$10$N9qo8uLOickgx2ZMRZo5i.e5k/E2PqxIDFkzJ.W/HRcU6yB1iMWty', 3);
+VALUES ('tom@email.com', '$2a$12$GiicvYx.vPEZ8a6yHunCP.OjTNrkPV20MtZZjiOynnMQOdKGaeFtO', 1),
+       ('merel@email.com', '$2a$12$GiicvYx.vPEZ8a6yHunCP.OjTNrkPV20MtZZjiOynnMQOdKGaeFtO', 2),
+       ('leo@email.com', '$2a$12$GiicvYx.vPEZ8a6yHunCP.OjTNrkPV20MtZZjiOynnMQOdKGaeFtO', 3);
 
 
 INSERT INTO posts (creator, post_status, start_date, end_date, title, remark, created_at)

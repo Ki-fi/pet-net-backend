@@ -1,6 +1,7 @@
 package petnet.com.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ public class User {
     private String firstName;
     private String preposition;
     private String lastName;
+    private String avatar;
     @OneToOne(mappedBy="user", cascade = CascadeType.ALL)
     private Account account;
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -49,6 +51,10 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getAvatar() { return avatar; }
+
+    public void setAvatar(String avatar) { this.avatar = avatar; }
+
     public Account getAccount() {
         return account;
     }
@@ -57,11 +63,7 @@ public class User {
         this.account = account;
     }
 
-    public List<Post> getPosts() {
-        return posts;
-    }
+    public List<Post> getPosts() { return posts; }
 
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
+    public void setPosts(List<Post> posts) { this.posts = posts; }
 }
