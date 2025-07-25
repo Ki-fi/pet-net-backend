@@ -45,9 +45,9 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("Bestand te groot! Max. 5MB");
     }
 
-    @ExceptionHandler(AvatarNotFoundException.class)
-    public ResponseEntity<String> handleAvatarNotFound(AvatarNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Deze gebruiker bestaat niet.");
     }
 
 
