@@ -65,6 +65,7 @@ public class PostService {
         dto.firstName = creator.getFirstName();
         dto.preposition = creator.getPreposition();
         dto.lastName = creator.getLastName();
+        dto.avatar = "/users/" + creator.getUserId() + "/avatar";
 
         dto.postId = post.getPostId();
         dto.startDate = post.getStartDate();
