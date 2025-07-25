@@ -1,5 +1,6 @@
 package petnet.com.exceptions;
 
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -39,14 +40,15 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Deze post bestaat niet.");
     }
 
-    @ExceptionHandler(StackOverflowError.class)
-    public ResponseEntity<String> handleStackOverflow(StackOverflowError e) {
-        // Log the top 20 stack frames to see where the loop starts
-        StackTraceElement[] trace = e.getStackTrace();
-        for (int i = 0; i < Math.min(20, trace.length); i++) {
-            System.err.println("SOF: " + trace[i]);
-        }
-        return ResponseEntity.internalServerError().body("Stack overflow occurred");
+    @ExceptionHandler(FileSizeLimitExceededException.class)
+    public ResponseEntity<String> handleFileSizeLimitExceeded(FileSizeLimitExceededException ex) {
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("Bestand te groot! Max. 5MB");
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Deze gebruiker bestaat niet.");
+    }
+
 
 }

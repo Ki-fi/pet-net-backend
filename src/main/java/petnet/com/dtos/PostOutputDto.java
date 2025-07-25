@@ -15,5 +15,6 @@ public class PostOutputDto {
     public String title;
     public String remark;
     public PostStatus postStatus;
+    public String avatar;
 
 }
