@@ -69,6 +69,7 @@ public class PostService {
 
         dto.postId = post.getPostId();
         dto.creator = creator.getUserId();
+        dto.createdAt = post.getCreatedAt();
         dto.startDate = post.getStartDate();
         dto.endDate = post.getEndDate();
         dto.title = post.getTitle();

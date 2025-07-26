@@ -3,11 +3,13 @@ package petnet.com.dtos;
 import petnet.com.models.PostStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PostOutputDto {
 
     public Long postId;
     public Long creator;
+    public LocalDateTime createdAt;
     public String firstName;
     public String preposition;
     public String lastName;
