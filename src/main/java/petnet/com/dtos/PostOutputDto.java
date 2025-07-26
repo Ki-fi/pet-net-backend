@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public class PostOutputDto {
 
     public Long postId;
+    public Long creator;
     public String firstName;
     public String preposition;
     public String lastName;

@@ -68,6 +68,7 @@ public class PostService {
         dto.avatar = "/users/" + creator.getUserId() + "/avatar";
 
         dto.postId = post.getPostId();
+        dto.creator = creator.getUserId();
         dto.startDate = post.getStartDate();
         dto.endDate = post.getEndDate();
         dto.title = post.getTitle();
