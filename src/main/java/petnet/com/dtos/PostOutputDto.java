@@ -21,6 +21,6 @@ public class PostOutputDto {
     public String remark;
     public PostStatus postStatus;
     public String avatar;
-    public List<Response> responses;
+    public List<ResponseOutputDto> responses;
 
 }
