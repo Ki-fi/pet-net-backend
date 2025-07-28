@@ -82,6 +82,7 @@ public class PostService {
             User user = response.getUserId();
 
             ResponseOutputDto responseDto = new ResponseOutputDto();
+            responseDto.responseId = response.getResponseId();
             responseDto.comment = response.getComment();
             responseDto.createdAt = response.getCreatedAt();
             responseDto.userId = user.getUserId();

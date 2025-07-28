@@ -19,6 +19,10 @@ public class Response {
     @JoinColumn(name = "applicationOrigin")
     private Post postId;
 
+    public Long getResponseId() {
+        return responseId;
+    }
+
     public String getComment() {
         return comment;
     }

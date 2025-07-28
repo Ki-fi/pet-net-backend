@@ -10,6 +10,8 @@ import petnet.com.repositories.PostRepository;
 import petnet.com.repositories.ResponseRepository;
 import petnet.com.repositories.UserRepository;
 
+import java.time.LocalDateTime;
+
 @Service
 public class ResponseService {
 
@@ -27,7 +29,7 @@ public class ResponseService {
 
         Response response = new Response();
         response.setComment(dto.comment);
-        response.setCreatedAt(dto.createdAt);
+        response.setCreatedAt(LocalDateTime.now());
 
         User user = userRepository.findById(dto.userId)
                 .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
