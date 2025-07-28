@@ -75,6 +75,7 @@ public class PostService {
         dto.title = post.getTitle();
         dto.remark = post.getRemark();
         dto.postStatus = post.getPostStatus();
+        dto.responses = post.getResponses();
 
         return dto;
     }

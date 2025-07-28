@@ -23,7 +23,7 @@ public class Post {
     private String title;
     private String remark;
     private LocalDateTime createdAt;
-    @OneToMany(mappedBy = "applicationOrigin", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "postId", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Response> responses;
 
     public Post() {}
