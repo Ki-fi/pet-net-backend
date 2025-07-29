@@ -22,5 +22,6 @@ public class PostOutputDto {
     public PostStatus postStatus;
     public String avatar;
     public List<ResponseOutputDto> responses;
+    public List<PostServiceOutputDto> services;
 
 }

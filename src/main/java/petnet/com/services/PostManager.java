@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import petnet.com.dtos.PostInputDto;
 import petnet.com.dtos.PostOutputDto;
+import petnet.com.dtos.PostServiceOutputDto;
 import petnet.com.dtos.ResponseOutputDto;
 import petnet.com.exceptions.PostNotFoundException;
 import petnet.com.models.Post;
@@ -102,6 +103,17 @@ public class PostManager {
 
             return responseDto;
         }).collect(Collectors.toList());
+
+        List<PostServiceOutputDto> serviceDto = post.getServices().stream()
+                .map(service -> {
+                    PostServiceOutputDto sDto = new PostServiceOutputDto();
+                    sDto.serviceId = service.getServiceId();
+                    sDto.title = service.getTitle();
+                    sDto.description = service.getDescription();
+                    return sDto;
+                }).collect(Collectors.toList());
+
+        dto.services = serviceDto;
 
         return dto;
     }
