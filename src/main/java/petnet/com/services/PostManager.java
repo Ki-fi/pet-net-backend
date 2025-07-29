@@ -7,6 +7,7 @@ import petnet.com.dtos.PostOutputDto;
 import petnet.com.dtos.ResponseOutputDto;
 import petnet.com.exceptions.PostNotFoundException;
 import petnet.com.models.Post;
+import petnet.com.models.PostService;
 import petnet.com.models.PostStatus;
 import petnet.com.models.User;
 import petnet.com.repositories.PostRepository;
@@ -17,13 +18,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PostService {
+public class PostManager {
 
     @Autowired
     private PostRepository postRepository;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PostServiceManager postServiceManager;
+
 
     public void createPost(PostInputDto dto) {
 
@@ -47,6 +52,10 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
 
         post.setCreator(user);
+
+        List<PostService> services = postServiceManager.convertToEntities(dto.services, post);
+        post.setServices(services);
+
         postRepository.save(post);
     }
 
