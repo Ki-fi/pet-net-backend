@@ -62,6 +62,7 @@ public class SecurityConfig {
                         .requestMatchers("/posts/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/users/*/avatar").permitAll()
                         .requestMatchers("/users/**").authenticated()
+                        .requestMatchers("/responses/**").authenticated()
                         .anyRequest().denyAll()
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))

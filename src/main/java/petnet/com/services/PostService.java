@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import petnet.com.dtos.PostInputDto;
 import petnet.com.dtos.PostOutputDto;
+import petnet.com.dtos.ResponseOutputDto;
 import petnet.com.exceptions.PostNotFoundException;
 import petnet.com.models.Post;
 import petnet.com.models.PostStatus;
@@ -13,6 +14,7 @@ import petnet.com.repositories.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -68,11 +70,29 @@ public class PostService {
         dto.avatar = "/users/" + creator.getUserId() + "/avatar";
 
         dto.postId = post.getPostId();
+        dto.creator = creator.getUserId();
+        dto.createdAt = post.getCreatedAt();
         dto.startDate = post.getStartDate();
         dto.endDate = post.getEndDate();
         dto.title = post.getTitle();
         dto.remark = post.getRemark();
         dto.postStatus = post.getPostStatus();
+
+        dto.responses = post.getResponses().stream().map(response -> {
+            User user = response.getUserId();
+
+            ResponseOutputDto responseDto = new ResponseOutputDto();
+            responseDto.responseId = response.getResponseId();
+            responseDto.comment = response.getComment();
+            responseDto.createdAt = response.getCreatedAt();
+            responseDto.userId = user.getUserId();
+            responseDto.firstName = user.getFirstName();
+            responseDto.preposition = user.getPreposition();
+            responseDto.lastName = user.getLastName();
+            responseDto.avatar = "/users/" + user.getUserId() + "/avatar";
+
+            return responseDto;
+        }).collect(Collectors.toList());
 
         return dto;
     }
