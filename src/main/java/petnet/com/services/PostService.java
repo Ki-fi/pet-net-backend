@@ -89,7 +89,7 @@ public class PostService {
             responseDto.firstName = user.getFirstName();
             responseDto.preposition = user.getPreposition();
             responseDto.lastName = user.getLastName();
-            responseDto.avatar = user.getAvatar();
+            responseDto.avatar = "/users/" + user.getUserId() + "/avatar";
 
             return responseDto;
         }).collect(Collectors.toList());

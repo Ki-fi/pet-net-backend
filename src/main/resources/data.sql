@@ -18,4 +18,5 @@ VALUES
 
 INSERT INTO responses (comment, created_at, applicant, application_origin)
 VALUES
-    ('Ik ben dat weekend beschikbaar en kom graag met Mittens spelen', CURRENT_TIMESTAMP, '2', '1');
+    ('Ik ben dat weekend beschikbaar en kom graag met Mittens spelen', CURRENT_TIMESTAMP, '2', '1'),
+    ('Dat is goed nieuws, zie ik je dan!', CURRENT_TIMESTAMP, '1', '1');
