@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import petnet.com.dtos.PostInputDto;
 import petnet.com.dtos.PostOutputDto;
-import petnet.com.services.PostService;
+import petnet.com.services.PostManager;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public class PostController {
 
     @Autowired
-    private PostService postService;
+    private PostManager postService;
 
     @PostMapping
     public ResponseEntity<String> createPost(@RequestBody PostInputDto dto, @AuthenticationPrincipal UserDetails userDetails) {

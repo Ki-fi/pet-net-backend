@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,8 @@ public class Post {
     private LocalDateTime createdAt;
     @OneToMany(mappedBy = "postId", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Response> responses;
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PostService> services = new ArrayList<>();
 
     public Post() {}
 
@@ -94,6 +97,14 @@ public class Post {
 
     public void setResponses(List<Response> responses) {
         this.responses = responses;
+    }
+
+    public List<PostService> getServices() {
+        return services;
+    }
+
+    public void setServices(List<PostService> services) {
+        this.services = services;
     }
 
 }

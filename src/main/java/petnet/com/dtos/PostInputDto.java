@@ -1,6 +1,7 @@
 package petnet.com.dtos;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class PostInputDto {
 
@@ -9,5 +10,6 @@ public class PostInputDto {
     public String title;
     public String remark;
     public Long userId;
+    public List<PostServiceInputDto> services;
 
 }
