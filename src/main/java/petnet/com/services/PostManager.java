@@ -1,7 +1,10 @@
 package petnet.com.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import petnet.com.dtos.PostInputDto;
 import petnet.com.dtos.PostOutputDto;
 import petnet.com.dtos.PostServiceOutputDto;
@@ -122,6 +125,17 @@ public class PostManager {
         Post post = postRepository.findById(id)
                 .orElseThrow(PostNotFoundException::new);
         return convertToOutputDto(post);
+    }
+
+    public void deletePost(Long postId, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+
+        if (!post.getCreator().getUserId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Je bent niet gemachtigd om deze post te verwijderen");
+        }
+
+        postRepository.delete(post);
     }
 
 

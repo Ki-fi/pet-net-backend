@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import petnet.com.dtos.PostInputDto;
 import petnet.com.dtos.PostOutputDto;
+import petnet.com.security.CustomUserDetails;
 import petnet.com.services.PostManager;
 
 import java.util.List;
@@ -37,5 +38,11 @@ public class PostController {
         return ResponseEntity.ok(dto);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable("id") Long postId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getUserId();
+        postService.deletePost(postId, userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
 }
