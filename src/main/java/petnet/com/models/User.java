@@ -1,11 +1,8 @@
 package petnet.com.models;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
+import jakarta.persistence.*;
 import java.util.List;
-import java.util.Map;
+import static petnet.com.models.UserRole.USER;
 
 @Entity
 @Table(name = "users")
@@ -24,6 +21,8 @@ public class User {
     private List<Post> posts;
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Response> responses;
+    @Enumerated(EnumType.STRING)
+    private UserRole role = USER;
 
     public Long getUserId() {
         return userId;
@@ -69,11 +68,11 @@ public class User {
 
     public void setPosts(List<Post> posts) { this.posts = posts; }
 
-    public List<Response> getResponses() {
-        return responses;
-    }
+    public List<Response> getResponses() { return responses; }
 
-    public void setResponses(List<Response> responses) {
-        this.responses = responses;
-    }
+    public void setResponses(List<Response> responses) { this.responses = responses; }
+
+    public UserRole getUserRole() { return role; }
+
+    public void setRole(UserRole role) { this.role = role; }
 }

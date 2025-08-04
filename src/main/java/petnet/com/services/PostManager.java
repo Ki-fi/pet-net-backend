@@ -10,6 +10,7 @@ import petnet.com.dtos.PostOutputDto;
 import petnet.com.dtos.PostServiceOutputDto;
 import petnet.com.dtos.ResponseOutputDto;
 import petnet.com.exceptions.PostNotFoundException;
+import petnet.com.exceptions.UserNotFoundException;
 import petnet.com.models.Post;
 import petnet.com.models.PostService;
 import petnet.com.models.PostStatus;
@@ -20,6 +21,8 @@ import petnet.com.repositories.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static petnet.com.models.UserRole.ADMIN;
 
 @Service
 public class PostManager {
@@ -131,7 +134,13 @@ public class PostManager {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
-        if (!post.getCreator().getUserId().equals(userId)) {
+        User user = userRepository.findById(userId)
+                .orElseThrow((UserNotFoundException::new));
+
+        boolean isCreator = post.getCreator().getUserId().equals(userId);
+        boolean isAdmin = user.getUserRole() == ADMIN;
+
+        if (!isCreator && !isAdmin) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Je bent niet gemachtigd om deze post te verwijderen");
         }
 

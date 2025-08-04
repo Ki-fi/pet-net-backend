@@ -10,6 +10,8 @@ import petnet.com.models.User;
 import petnet.com.repositories.AccountRepository;
 import petnet.com.repositories.UserRepository;
 
+import static petnet.com.models.UserRole.USER;
+
 @Service
 public class AccountService {
 
@@ -36,6 +38,7 @@ public class AccountService {
         user.setFirstName(dto.firstName);
         user.setPreposition(dto.preposition);
         user.setLastName(dto.lastName);
+        user.setRole(USER);
 
         Account account = new Account();
         account.setEmail(dto.email);

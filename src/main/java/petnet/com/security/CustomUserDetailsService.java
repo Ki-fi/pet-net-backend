@@ -16,10 +16,19 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.accountRepository = accountRepository;
     }
 
-    @Override
+   @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return accountRepository.findByEmail(email)
-                .map(CustomUserDetails::new)
+        Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Geen account gevonden met dit emailadres"));
+
+        account.getUser().getUserRole();
+
+       System.out.println("Account class: " + account.getClass().getName());
+       System.out.println("User class: " + account.getUser().getClass().getName());
+       System.out.println("Role: " + account.getUser().getUserRole());
+
+
+       return new CustomUserDetails(account);
     }
+
 }
