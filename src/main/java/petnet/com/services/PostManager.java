@@ -1,12 +1,16 @@
 package petnet.com.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import petnet.com.dtos.PostInputDto;
 import petnet.com.dtos.PostOutputDto;
 import petnet.com.dtos.PostServiceOutputDto;
 import petnet.com.dtos.ResponseOutputDto;
 import petnet.com.exceptions.PostNotFoundException;
+import petnet.com.exceptions.UserNotFoundException;
 import petnet.com.models.Post;
 import petnet.com.models.PostService;
 import petnet.com.models.PostStatus;
@@ -17,6 +21,8 @@ import petnet.com.repositories.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static petnet.com.models.UserRole.ADMIN;
 
 @Service
 public class PostManager {
@@ -122,6 +128,23 @@ public class PostManager {
         Post post = postRepository.findById(id)
                 .orElseThrow(PostNotFoundException::new);
         return convertToOutputDto(post);
+    }
+
+    public void deletePost(Long postId, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow((UserNotFoundException::new));
+
+        boolean isCreator = post.getCreator().getUserId().equals(userId);
+        boolean isAdmin = user.getUserRole() == ADMIN;
+
+        if (!isCreator && !isAdmin) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Je bent niet gemachtigd om deze post te verwijderen");
+        }
+
+        postRepository.delete(post);
     }
 
 

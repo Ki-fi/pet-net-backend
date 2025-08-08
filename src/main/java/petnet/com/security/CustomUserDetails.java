@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import petnet.com.models.Account;
 import petnet.com.models.User;
+import petnet.com.models.UserRole;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,31 +13,39 @@ import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final Account account;
-    private final User user;
+    private final String username;
+    private final String password;
+    private final UserRole userRole;
+    private final Long userId;
 
     public CustomUserDetails(Account account) {
-        this.account = account;
-        this.user = account.getUser();
+        this.username = account.getEmail();
+        this.password = account.getPassword();
+        this.userRole = account.getUser().getUserRole();
+        this.userId = account.getUser().getUserId();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + userRole.name()));
     }
 
     @Override
     public String getPassword() {
-        return account.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return account.getEmail();
+        return username;
     }
 
     public Long getUserId() {
-        return user.getUserId();
+        return userId;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
     }
 
     @Override

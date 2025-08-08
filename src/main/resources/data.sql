@@ -1,7 +1,8 @@
-INSERT INTO users(avatar, first_name, preposition, last_name)
-VALUES ('avatar_of_user_1.png','Tom', '', 'Kats'),
-       ('avatar_of_user_2.png','Kitty', 'van', 'Dieren'),
-       ('avatar_of_user_3.png','Leo', 'den', 'Purr');
+
+INSERT INTO users(avatar, first_name, preposition, last_name, role)
+VALUES ('avatar_of_user_1.png','Tom', '', 'Kats', 'ADMIN'),
+       ('avatar_of_user_2.png','Kitty', 'van', 'Dieren', 'USER'),
+       ('avatar_of_user_3.png','Leo', 'den', 'Purr', 'USER');
 
 INSERT INTO accounts(email, password, user_id)
 VALUES ('tom@email.com', '$2a$12$GiicvYx.vPEZ8a6yHunCP.OjTNrkPV20MtZZjiOynnMQOdKGaeFtO', 1),
