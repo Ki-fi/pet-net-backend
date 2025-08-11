@@ -107,5 +107,8 @@ public class Post {
         this.services = services;
     }
 
+    public void setPostId(long l) {
+
+    }
 }
 

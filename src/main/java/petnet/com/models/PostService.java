@@ -44,4 +44,6 @@ public class PostService {
         this.post = post;
     }
 
+    public void setServiceId(long l) {
+    }
 }

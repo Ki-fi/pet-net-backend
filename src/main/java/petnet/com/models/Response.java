@@ -54,4 +54,8 @@ public class Response {
     public void setPostId(Post postId) {
         this.postId = postId;
     }
+
+    public void setResponseId(long l) {
+
+    }
 }

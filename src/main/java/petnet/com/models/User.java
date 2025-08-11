@@ -76,7 +76,7 @@ public class User {
 
     public void setRole(UserRole role) { this.role = role; }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Long userId) { this.userId = userId; }
 
-    }
+
 }
