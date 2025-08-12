@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PostServiceManagerTest {
+class PostServiceManagerUnitTest {
 
     PostServiceManager manager = new PostServiceManager();
 
