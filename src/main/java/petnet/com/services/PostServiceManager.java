@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import petnet.com.dtos.PostServiceInputDto;
 import petnet.com.models.Post;
 import petnet.com.models.PostService;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

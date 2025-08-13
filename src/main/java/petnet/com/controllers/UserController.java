@@ -1,7 +1,6 @@
 package petnet.com.controllers;
 
 import org.springframework.core.io.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +16,11 @@ import petnet.com.services.UserService;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PutMapping("/{id}/avatar")
     public ResponseEntity<?> uploadAvatar(@PathVariable("id") Long userId, @RequestParam("file") MultipartFile file, @AuthenticationPrincipal UserDetails userDetails) {

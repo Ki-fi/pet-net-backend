@@ -1,7 +1,6 @@
 package petnet.com.models;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -107,5 +106,8 @@ public class Post {
         this.services = services;
     }
 
+    public void setPostId(long l) {
+
+    }
 }
 

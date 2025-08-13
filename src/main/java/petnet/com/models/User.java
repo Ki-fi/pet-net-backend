@@ -75,4 +75,8 @@ public class User {
     public UserRole getUserRole() { return role; }
 
     public void setRole(UserRole role) { this.role = role; }
+
+    public void setUserId(Long userId) { this.userId = userId; }
+
+
 }

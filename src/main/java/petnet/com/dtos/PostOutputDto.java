@@ -1,8 +1,6 @@
 package petnet.com.dtos;
 
 import petnet.com.models.PostStatus;
-import petnet.com.models.Response;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
