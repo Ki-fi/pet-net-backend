@@ -18,8 +18,11 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-    @Autowired
-    private PostManager postService;
+    private final PostManager postService;
+
+    public PostController(PostManager postService) {
+        this.postService = postService;
+    }
 
     @PostMapping
     public ResponseEntity<String> createPost(@RequestBody PostInputDto dto, @AuthenticationPrincipal UserDetails userDetails) {

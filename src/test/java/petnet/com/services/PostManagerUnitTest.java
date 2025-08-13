@@ -13,12 +13,13 @@ import petnet.com.dtos.PostOutputDto;
 import petnet.com.dtos.PostServiceOutputDto;
 import petnet.com.dtos.ResponseOutputDto;
 import petnet.com.exceptions.PostNotFoundException;
+import petnet.com.mappers.PostMapper;
 import petnet.com.models.*;
 import petnet.com.repositories.PostRepository;
 import petnet.com.repositories.UserRepository;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,21 +33,23 @@ import static org.mockito.Mockito.when;
 class PostManagerUnitTest {
 
     @Mock
-    PostRepository postRepository;
+    private PostRepository postRepository;
 
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
-    PostServiceManager postServiceManager;
+    private PostServiceManager postServiceManager;
+
+    @Mock
+    private PostMapper postMapper;
 
     @InjectMocks
-    PostManager postManager;
-
-    PostInputDto dto;
-    User testUser;
-    Post post;
-    List<Post> posts;
+    private PostManager postManager;
+    private PostInputDto dto;
+    private User testUser;
+    private Post post;
+    private List<Post> posts;
 
     @BeforeEach
     void setUp() {
@@ -89,7 +92,8 @@ class PostManagerUnitTest {
         post.setServices(List.of(service));
         post.setResponses(List.of(response));
 
-        posts = List.of(post);
+        posts = new ArrayList<>();
+        posts.add(post);
 
     }
 
@@ -164,7 +168,23 @@ class PostManagerUnitTest {
 
 //      Given
         when(userRepository.findById(dto.userId)).thenReturn(Optional.of(testUser));
-        when(postServiceManager.convertToEntities(anyList(), any())).thenReturn(List.of());
+        when(postMapper.toPostEntity(any(PostInputDto.class), any(User.class), anyList()))
+                .thenAnswer(invocation -> {
+                    PostInputDto dtoArg = invocation.getArgument(0);
+                    User userArg = invocation.getArgument(1);
+                    List<PostService> servicesArg = invocation.getArgument(2);
+
+                    Post post = new Post();
+                    post.setTitle(dtoArg.title);
+                    post.setStartDate(dtoArg.startDate);
+                    post.setEndDate(dtoArg.endDate);
+                    post.setRemark(dtoArg.remark);
+                    post.setCreator(userArg);
+                    post.setServices(servicesArg);
+                    post.setPostStatus(PostStatus.ACTIVE);
+                    post.setCreatedAt(LocalDateTime.now());
+                    return post;
+                });
 
 //      When
         postManager.createPost(dto);
@@ -182,6 +202,14 @@ class PostManagerUnitTest {
     void shouldReturnCorrectPost() {
 
 //      Given
+        PostOutputDto dto = new PostOutputDto();
+        dto.title = post.getTitle();
+        dto.creator = post.getCreator().getUserId();
+        dto.createdAt = post.getCreatedAt();
+        dto.startDate = post.getStartDate();
+        dto.endDate = post.getEndDate();
+
+        when(postMapper.toPostOutputDto(post)).thenReturn(dto);
         when(postRepository.findAll()).thenReturn(posts);
 
 //      When
@@ -193,7 +221,6 @@ class PostManagerUnitTest {
         assertEquals(post.getCreatedAt(), result.get(0).createdAt);
         assertEquals(post.getStartDate(), result.get(0).startDate);
         assertEquals(post.getEndDate(), result.get(0).endDate);
-        assertEquals(post.getRemark(), result.get(0).remark);
 
     }
 
@@ -201,20 +228,28 @@ class PostManagerUnitTest {
     void shouldReturnCorrectResponse() {
 
 //      Given
-        when(postRepository.findAll()).thenReturn(List.of(post));
+        Response response = post.getResponses().get(0);
+
+        ResponseOutputDto responseDto = new ResponseOutputDto();
+        responseDto.responseId = response.getResponseId();
+        responseDto.comment = response.getComment();
+        responseDto.createdAt = response.getCreatedAt();
+        responseDto.userId = response.getUserId().getUserId();
+
+        PostOutputDto postDto = new PostOutputDto();
+        postDto.responses = List.of(responseDto);
 
 //      When
+        when(postMapper.toPostOutputDto(post)).thenReturn(postDto);
+        when(postRepository.findAll()).thenReturn(posts);
         List<PostOutputDto> result = postManager.getAllPosts();
 
 //      Then
-        ResponseOutputDto mappedResponse = result.get(0).responses.get(0);
-        assertEquals(post.getResponses().get(0).getResponseId(), mappedResponse.responseId);
-        assertEquals(post.getResponses().get(0).getComment(), mappedResponse.comment);
-        assertEquals(post.getResponses().get(0).getCreatedAt(), mappedResponse.createdAt);
-        assertEquals(testUser.getUserId(), mappedResponse.userId);
-        assertEquals(testUser.getFirstName(), mappedResponse.firstName);
-        assertEquals(testUser.getPreposition(), mappedResponse.preposition);
-        assertEquals(testUser.getLastName(), mappedResponse.lastName);
+        assertEquals(1, result.get(0).responses.size());
+        assertEquals(response.getResponseId(), result.get(0).responses.get(0).responseId);
+        assertEquals(response.getComment(), result.get(0).responses.get(0).comment);
+        assertEquals(response.getCreatedAt(), result.get(0).responses.get(0).createdAt);
+        assertEquals(testUser.getUserId(), result.get(0).responses.get(0).userId);
 
     }
 
@@ -222,9 +257,19 @@ class PostManagerUnitTest {
     void shouldReturnCorrectServices() {
 
 //      Given
-        when(postRepository.findAll()).thenReturn(List.of(post));
+        PostService service = post.getServices().get(0);
+
+        PostServiceOutputDto serviceDto = new PostServiceOutputDto();
+        serviceDto.serviceId = service.getServiceId();
+        serviceDto.title = service.getTitle();
+        serviceDto.description = service.getDescription();
+
+        PostOutputDto postDto = new PostOutputDto();
+        postDto.services = List.of(serviceDto);
 
 //      When
+        when(postMapper.toPostOutputDto(post)).thenReturn(postDto);
+        when(postRepository.findAll()).thenReturn(posts);
         List<PostOutputDto> result = postManager.getAllPosts();
 
 //      Then
@@ -257,7 +302,16 @@ class PostManagerUnitTest {
 //      Given
         when(postRepository.findById(1L)).thenReturn(Optional.of(post));
 
+        PostOutputDto postDto = new PostOutputDto();
+        postDto.title = post.getTitle();
+        postDto.creator = post.getCreator().getUserId();
+        postDto.createdAt = post.getCreatedAt();
+        postDto.startDate = post.getStartDate();
+        postDto.endDate = post.getEndDate();
+        postDto.remark = post.getRemark();
+
 //      When
+        when(postMapper.toPostOutputDto(post)).thenReturn(postDto);
         PostOutputDto result = postManager.getPostById(1L);
 
 //      Then
@@ -288,7 +342,6 @@ class PostManagerUnitTest {
         User admin = new User();
         admin.setUserId(2L);
         admin.setRole(UserRole.ADMIN);
-        System.out.println("User role: " + admin.getUserRole());
 
         when(postRepository.findById(1L)).thenReturn(Optional.of(post));
         when(userRepository.findById(admin.getUserId())).thenReturn(Optional.of(admin));

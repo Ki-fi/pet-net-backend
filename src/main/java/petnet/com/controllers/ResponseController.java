@@ -1,6 +1,5 @@
 package petnet.com.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,8 +13,11 @@ import petnet.com.services.ResponseService;
 @RequestMapping("/responses")
 public class ResponseController {
 
-    @Autowired
-    private ResponseService responseService;
+    private final ResponseService responseService;
+
+    public ResponseController(ResponseService responseService) {
+        this.responseService = responseService;
+    }
 
     @PostMapping
     public ResponseEntity<String> addResponse(@RequestBody ResponseInputDto dto, @AuthenticationPrincipal UserDetails userDetails) {

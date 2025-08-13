@@ -1,6 +1,5 @@
 package petnet.com.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import petnet.com.dtos.ResponseInputDto;
 import petnet.com.models.Post;
@@ -15,15 +14,17 @@ import java.time.LocalDateTime;
 @Service
 public class ResponseService {
 
-    @Autowired
-    private ResponseRepository responseRepository;
+    private final ResponseRepository responseRepository;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PostRepository postRepository;
-
+    public ResponseService(ResponseRepository responseRepository,
+                           UserRepository userRepository,
+                           PostRepository postRepository) {
+        this.responseRepository = responseRepository;
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
+    }
 
     public void createResponse(ResponseInputDto dto) {
 
